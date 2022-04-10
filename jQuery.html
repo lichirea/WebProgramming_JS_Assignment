@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Slider with images</title>
+    <style>
+        div{
+            display: flex;
+            width: auto;
+            height: 100vh;
+            align-items: center;
+        }
+        .sliders {
+            height: 100px;
+            width: 100px;
+            position: relative;
+        }
+
+        #popup {
+            position: static;
+            left:25%;
+            width:800px;
+            height: 800px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        
+        imgs = ["3", "2", "1"]
+        $(document).ready(function(){
+
+                function goRight(str) {
+                    $("#" + str).animate({
+                    left: '100vw'
+                }, 3000, "linear", function() {
+                    setTimeout(goLeft, 50, str);
+                });
+                }
+
+                function goLeft(str) {
+                    $("#" + str).animate({
+                    left: -500}, 1, "linear", function() {
+                    setTimeout(goRight, 50, str);
+                });
+                }
+                
+                function letsGo(){
+                    let i = 1
+                    imgs.forEach(element => {
+                        setTimeout(goRight, 500 * i, element);
+                        i++
+                    });
+                }
+                
+                
+                $(".sliders").click(function(){
+                    $("img").stop();
+                    clickedImage = $(event.target).attr("src");
+                    const popup = document.createElement("img");
+                    popup.id = "popup";
+                    popup.src = clickedImage;
+                    popup.style.zIndex = "5";
+                    let container = document.getElementById("img-container");
+                    container.appendChild(popup);
+                });
+
+
+                $("body").on("click", "#popup", function() {
+                    console.log("CLICKED");
+                    console.log($(event.target));
+                    $(event.target).remove("#popup");
+                    letsGo();
+                });
+
+
+                letsGo();
+
+        });
+    </script>
+</head>
+<body>
+
+    <div class="flex" id="img-container">  
+        <img id="1" class="sliders" src="dog4.jpg">
+        <img id="2" class="sliders" src="dog5.jpg">
+        <img id="3" class="sliders" src="dog6.jpg"> 
+    </div>
+   
+    
+
+</body>
+</html>
